@@ -1,0 +1,155 @@
+<div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
+  <div fxFlex="15" class="filler-div">
+  </div>
+  <div fxFlex="70" class="main-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Country</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxFlex="30" class="filters-section">
+          <mat-form-field id="country-autocomplete">
+            <input matInput type="text" placeholder="Select or Type a Country Name" [matAutocomplete]="auto" [formControl]="countryControl" (keydown.enter)="selectTopCountry()">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectCountry($event)" (opened)="setFirstOptionActive()">
+              <mat-option *ngFor="let country of filteredCountries" [value]="country.code">
+                {{ country.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <button mat-icon-button matSuffix (click)="resetSelection();" *ngIf="selectedCountry">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+  
+          <div class="slider-container" *ngIf="selectedCountry === 'ALL'">
+            <h4 class="filter-subtitle">
+              Filter by Population Size
+            </h4>
+            <h4 class="slider-values">
+              <span class="label">Min value:&nbsp;</span>
+              <span class="value">{{ formatPopulationValue(sliderValueMin) }}&nbsp;&nbsp;</span>
+            </h4>
+            <mat-slider
+              [min]="1" 
+              [max]="maxPopulation"
+              [step]="sliderStep"
+              (change)="filterBySliderValues()"
+              [displayWith]="formatLabel"
+              [disabled]="selectedCountry !== 'ALL'"
+              color="accent">
+              <input value="1" matSliderThumb [(ngModel)]="sliderValueMin">
+            </mat-slider>
+            <h4 class="slider-values" [class.disabled]="selectedCountry !== 'ALL'">
+              <span class="label">Max value :&nbsp;</span>
+              <span class="value">{{ formatPopulationValue(sliderValueMax) }}&nbsp;&nbsp;</span>
+            </h4>
+            <mat-slider
+              [min]="1" 
+              [max]="maxPopulation"
+              [step]="sliderStep"
+              (change)="filterBySliderValues()"
+              [displayWith]="formatLabel"
+              [disabled]="selectedCountry !== 'ALL'"
+              color="warn">
+              <input value="maxPopulation" matSliderThumb [(ngModel)]="sliderValueMax">
+            </mat-slider>
+          </div>
+        </div>
+        <div fxFlex="70" class="table-section" [class.empty]="!selectedCountry">
+          <div [hidden]="selectedCountry !==null">
+            <h4 class="app-intro">No Country selected</h4>
+          </div>
+          <div [hidden]="selectedCountry !== 'ALL'">
+            <h3 class="country-selection-title" id='All-country-title'> 
+              All Countries Data
+              <mat-chip-listbox aria-label="Population Size Filters">
+                <mat-chip-option #minChip color="accent" selected *ngIf="sliderValueMin !== 1" (click)="onMinSizeChipClick()">
+                  Min value {{ formatPopulationValue(sliderValueMin) }}
+                  <button matChipRemove (click)="onMinSizeChipClick()">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-option>
+                <mat-chip-option #maxChip color="warn" selected *ngIf="sliderValueMax !== maxPopulation" (click)="onMaxSizeChipClick()">
+                  Max value {{ formatPopulationValue(sliderValueMax) }}
+                  <button matChipRemove (click)="onMaxSizeChipClick()">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-option>
+              </mat-chip-listbox>
+            </h3>
+            <!-- Template for the Sortable, Paginated Mat-Table for Country level data -->
+            <mat-table [dataSource]="dataSource" matSort id="all-countries-data-source">
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Country </mat-header-cell>
+                <mat-cell *matCellDef="let country"> {{ country.name }} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="population">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Population </mat-header-cell>
+                <mat-cell *matCellDef="let country"> {{ formatPopulationValue(country.population) }}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="code">
+                <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+                <mat-cell *matCellDef="let country"> {{ country.code }} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="flag">
+                <mat-header-cell *matHeaderCellDef> Flag </mat-header-cell>
+                <mat-cell *matCellDef="let country"> {{ country.flag }} </mat-cell>
+              </ng-container>
+  
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                  <span class="no-data-message">
+                    No data matching the filters
+                  </span>
+                </td>
+              </tr>
+            </mat-table>
+  
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10"></mat-paginator>
+    
+          </div>
+          
+          <div [hidden]="selectedCountry === 'ALL'">
+            <div class="cities-wrapper" *ngIf="cities.length">
+              <h3 id="selected-country-title" class="country-selection-title">
+                <span matBadge="{{selectedCountryCode}}" matBadgeSize="large"></span> 
+                {{ selectedCountry }}
+                <span class="country-population-subtitle">
+                  <span class="separator">&nbsp;|&nbsp;</span>
+                  <span class="label">Population Total:&nbsp;</span>
+                  <span class="value">{{ formatPopulationValue(selectedCountryPopulation) }}</span>
+                </span>
+              </h3>
+
+              <!-- Template for  the simple Mat-Table displayint city level data -->
+              <mat-table [dataSource]="cityDataSource" id="selected-country-city-data-source">
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef> City </mat-header-cell>
+                  <mat-cell *matCellDef="let city" [class.semibold]="city.capital"> {{ city.name }} 
+                    <span class="capital" [hidden]="city.capital !== true">&nbsp;&nbsp;Capital</span>
+                  </mat-cell>
+                </ng-container>
+  
+                <ng-container matColumnDef="population">
+                  <mat-header-cell *matHeaderCellDef> Population </mat-header-cell>
+                  <mat-cell *matCellDef="let city" [class.semibold]="city.capital"> {{ formatPopulationValue(city.population) }}</mat-cell>
+                </ng-container>
+              
+                <mat-header-row *matHeaderRowDef="cityDisplayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: cityDisplayedColumns;"></mat-row>
+              </mat-table>
+                                  
+            </div>
+          </div>
+        </div>    
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex="15" class="filler-div">
+  </div>
+</div>

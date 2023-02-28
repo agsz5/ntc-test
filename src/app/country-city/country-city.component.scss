@@ -1,0 +1,159 @@
+$goldie: #c19b76;
+
+:host {
+    font-family: 'Jost', sans-serif;
+  }
+h3 {
+    &.country-selection-title {
+        margin:0 0 15px;
+        font-weight: 500;
+        font-size: 20px;
+        .mat-badge {
+            display: inline-flex;
+            vertical-align: middle;
+            margin:0 15px;
+            .mat-badge-content {
+                background-color: gray;
+                font-size: 10px;
+            }
+        }
+        mat-chip-listbox {
+            vertical-align: baseline;
+            margin-bottom: 10px;
+            .mdc-evolution-chip-set__chips {
+                justify-content: left;
+            }
+            .mat-mdc-chip-graphic {
+                display: none;
+            }
+            .mdc-evolution-chip__text-label {
+                padding-left: 15px;
+            }
+        }
+        span {
+            &.country-population-subtitle {
+                color: $goldie;
+                .separator {
+                    color: lightgray;
+                    font-weight: 200;
+                }
+                .label {
+                    color:lighten($color:#000, $amount: 30);
+                    font-size: 14px;
+                    font-weight: normal;
+                }
+                .value {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+h4 {
+    &.app-intro {
+        font-weight: normal;
+        margin-top: 10px;
+    }
+    &.country-population-subtitle {
+        font-size: 16px;
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+    &.city-title {
+        span {
+            &.city-capital {
+                color: orange;
+                font-size: smaller;
+            }
+            &.city-population {
+                font-weight: normal;
+            }
+        }
+    }
+    &.filter-subtitle {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        &.disabled {
+            color:lighten($color:#000, $amount: 50);
+        }
+    }
+    &.slider-values {
+        font-size: small;
+        margin: 0;
+        span {
+            &.label {
+                font-weight: 400;
+            }
+            &.value {
+                font-weight:500;
+            }
+        }
+        &.disabled {
+            color:lighten($color:#000, $amount: 60);
+        }
+    }
+}
+div {
+    .content {
+        .main-section {
+			 .table-section {
+                min-height: 350px;
+                border-left: 1px solid lightgray; 
+                padding-left: 15px;
+                &.empty {
+                    background-color: whitesmoke;
+                }
+                mat-table {
+                    .mat-mdc-header-row {
+                        background-color: whitesmoke;
+                    }
+                    .mat-mdc-header-cell {
+                        font-family: 'Jost', sans-serif;
+                    }
+                    .no-data-message {
+                        display: block;
+                        font-weight: normal;
+                        margin-top: 10px;
+                        color: $goldie;
+                    }
+                }
+                span {
+                    &.capital {
+                        font-size: 12px;
+                        color:lighten($color:#000, $amount: 50);
+                        font-weight: normal;
+                    }
+                }
+                hr {
+                    &.table-divider {
+                        margin-bottom: 0;
+                        border-style: solid;
+                        color:lighten($color:#000, $amount: 30);
+                    }
+                }
+                .bold {
+                    font-weight: bold;
+                }
+                .bolder {
+                    font-weight: bolder;
+                }
+                .semibold {
+                    font-weight: 600;
+                }
+             }
+             .filters-section {
+                padding-right: 15px;
+                mat-form-field#country-autocomplete {
+                    width: 100%;
+                }
+                .mdc-slider__thumb-knob {
+                    background-color: $goldie;
+                }
+             }
+        }
+    }
+}
+.mat-mdc-card-title {
+    font-family: 'Jost', sans-serif;
+}
