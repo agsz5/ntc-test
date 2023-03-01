@@ -1,27 +1,27 @@
 # NtcTest
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
+NTC Home assignment: 'EU Population Browser'. This project was generated with Angular CLI version 15.2.0.
 
-## Development server
+## Runnin the project
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Clone the Git repository
+- Run `npm install`
+- Run `npm run serve-ntc` for a dev server. Navigate to `http://localhost:4200/`
 
-## Code scaffolding
+## Home Assignment Focus
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The objectives for this assignment were:
 
-## Build
+1. To implement as much functionality as possible (even outside specification) to make the data browsing more convenient and more conducive to generating insights: sorting mechanisms, filtering, pagination, and text autocomplete
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. To do so in 5 hours or less.
 
-## Running unit tests
+In retrospect, this may not have been the most optimal approach.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Known Bugs
+
+Some time was spent trying to make the "mat-table" for city data paginated and sortable, but it kept clashing with the country form control. Given the time constraints, the city data table was left as a basic table.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Run `npm run cypress:run` to execute the end-to-end tests via Cypress
